@@ -119,6 +119,9 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <excludePackageNames>com.facebook.thrift:com.facebook.thrift.*</excludePackageNames>
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
                 </configuration>
                 <executions>
                     <execution>

@@ -18,9 +18,11 @@ public class MethodUtil {
 
     /**
      * 把一个字符串的第一个字母大写、效率是最高的
-      */
-    public static String getMethodName(String fildeName){
-        byte[] items = fildeName.getBytes();
+     * @param filedName
+     * @return String
+     */
+    public static String getMethodName(String filedName){
+        byte[] items = filedName.getBytes();
         items[0] = (byte) ((char) items[0] - 'a' + 'A');
         return new String(items);
     }

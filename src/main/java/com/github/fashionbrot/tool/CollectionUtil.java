@@ -13,6 +13,26 @@ public class CollectionUtil {
 
     }
 
+    /**
+     * Is empty boolean.
+     *
+     * @param array the array
+     * @return the boolean
+     */
+    public static boolean isEmpty(Object[] array) {
+        return !isNotEmpty(array);
+    }
+
+    /**
+     * Is not empty boolean.
+     *
+     * @param array the array
+     * @return the boolean
+     */
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
+    }
+
 
     public static boolean isEmpty( Collection<?> collection) {
         return collection == null || collection.isEmpty();

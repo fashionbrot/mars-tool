@@ -15,6 +15,10 @@ public class CompressorFactory {
 
     static {
         COMPRESSOR_MAP.put(CompressorType.NONE, new NoneCompressor());
+        ServiceLoader<Compressor> classLoader = ServiceLoader.load(Compressor.class);
+        for(Compressor service : classLoader) {
+            COMPRESSOR_MAP.put(service.type(),service);
+        }
     }
 
     /**
@@ -30,11 +34,7 @@ public class CompressorFactory {
         if (COMPRESSOR_MAP.containsKey(type)) {
             return COMPRESSOR_MAP.get(type);
         } else {
-            ServiceLoader<Compressor> classLoader = ServiceLoader.load(Compressor.class);
-            for(Compressor service : classLoader) {
-                COMPRESSOR_MAP.put(service.type(),service);
-            }
-            return COMPRESSOR_MAP.get(type);
+            return COMPRESSOR_MAP.get(CompressorType.NONE);
         }
     }
 

@@ -34,4 +34,12 @@ public class HttpResult {
     public void setResponseBody(String responseBody) {
         this.responseBody = responseBody;
     }
+
+    @Override
+    public String toString() {
+        return "HttpResult{" +
+                "code=" + code +
+                ", responseBody='" + responseBody + '\'' +
+                '}';
+    }
 }

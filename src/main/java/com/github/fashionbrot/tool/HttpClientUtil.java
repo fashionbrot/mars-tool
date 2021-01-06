@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,30 +38,62 @@ public class HttpClientUtil {
         return httpGet(url,headers,paramValues,charset,2000,2000);
     }
 
+    public static HttpResult httpGet(String url,String charset,Map<String,Object> headers,Map<String,Object> paramValues){
+        return httpGet(url,headers,paramValues,charset,2000,2000);
+    }
+
     public static HttpResult httpGet(String url,String charset,List<String> headers,int readTimeoutMs,int connectTimeOutMs){
         return httpGet(url,headers,null,charset,readTimeoutMs,connectTimeOutMs);
+    }
+
+    public static HttpResult httpGet(String url,String charset,Map<String,Object> headers,int readTimeoutMs,int connectTimeOutMs){
+            return httpGet(url,headers,null,charset,readTimeoutMs,connectTimeOutMs);
     }
 
     public static HttpResult httpGet(String url,String charset,int readTimeoutMs,int connectTimeOutMs){
         return httpGet(url,null,null,charset,readTimeoutMs,connectTimeOutMs);
     }
 
+    /**
+     * GET 请求
+     * @param url           url
+     * @param headers       header
+     * @param paramValues   value
+     * @return HttpResult
+     */
+    public static  HttpResult httpGet(String url, List<String> headers, List<String> paramValues){
+        return httpGet(url,headers,paramValues, CharsetConstant.UTF_8,5000,5000);
+    }
 
 
     /**
      * 发送GET请求
      * @param url               url
-     * @param headers           header
-     * @param paramValues       value
+     * @param headers           header(map,list)
+     * @param paramValues       value(map,list)
      * @param encoding          encoding
      * @param readTimeoutMs     readTimeoutMs
      * @param connectTimeout    connectTimeout
      * @return HttpResult
      */
-    public static  HttpResult httpGet(String url,Object headers, List<String> paramValues,String encoding, int readTimeoutMs,int connectTimeout) {
-
+    public static  HttpResult httpGet(String url,Object headers, Object paramValues,String encoding, int readTimeoutMs,int connectTimeout) {
         String encodedContent = encodingParams(paramValues);
         url += (null == encodedContent) ? "" : ("?" + encodedContent);
+        return httpGet(url,headers,encoding,readTimeoutMs,connectTimeout);
+    }
+
+    /**
+     * 发送GET请求
+     * @param url               url
+     * @param headers           header (map,list)
+     * @param encoding          encoding
+     * @param readTimeoutMs     readTimeoutMs
+     * @param connectTimeout    connectTimeout
+     * @return HttpResult
+     */
+    public static  HttpResult httpGet(String url,Object headers, String encoding, int readTimeoutMs,int connectTimeout) {
+
+
 
         HttpURLConnection conn = null;
         InputStream inputStream = null;
@@ -106,16 +137,6 @@ public class HttpClientUtil {
     }
 
 
-    /**
-     * GET 请求
-     * @param url           url
-     * @param headers       header
-     * @param paramValues   value
-     * @return HttpResult
-     */
-    public static  HttpResult httpGet(String url, List<String> headers, List<String> paramValues){
-        return httpGet(url,headers,paramValues, CharsetConstant.UTF_8,5000,5000);
-    }
 
 
     /**
@@ -246,6 +267,16 @@ public class HttpClientUtil {
         conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset="+CharsetConstant.UTF_8);
     }
 
+    private static String encodingParams(Object paramValues){
+        if (paramValues instanceof List) {
+            List<String> paramList= (List<String>) paramValues;
+            return encodingParams(paramList);
+        }else if (paramValues instanceof Map){
+            Map<String,Object> objectMap = (Map<String, Object>) paramValues;
+            return encodingParams(objectMap);
+        }
+        return null;
+    }
 
     private static String encodingParams(List<String> paramValues) {
         StringBuilder sb = new StringBuilder();
@@ -293,5 +324,13 @@ public class HttpClientUtil {
         map.put("test",2);
         map.put("test2",212321);
         System.out.println(encodingParams(map));
+        Map<String,Object> h=new HashMap<>();
+        h.put("sec-ch-ua","\"Google Chrome\";v=\"87\", \" Not;A Brand\";v=\"99\", \"Chromium\";v=\"87\"");
+        h.put("sec-ch-ua-mobile","?0");
+        h.put("Upgrade-Insecure-Requests","1");
+        h.put("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36");
+
+        HttpResult httpResult = httpGet("https://m.weibo.cn/search?containerid=100103type%3D1%26q%3D%E5%A6%87%E5%B9%BC%E4%BF%9D%E5%81%A5%E5%B8%88","utf-8",h,2000,2000);
+        System.out.println(httpResult.toString());
     }
 }

@@ -1,16 +1,86 @@
 package com.github.fashionbrot.tool;
 
-import com.github.fashionbrot.tool.enums.ClassTypeEnum;
-import lombok.extern.slf4j.Slf4j;
-import static com.github.fashionbrot.tool.StringUtil.isNumeric;
+import org.apache.commons.compress.utils.Charsets;
 
-@Slf4j
+import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.Map;
+
+
 public class ObjectUtil {
-    private ObjectUtil(){
 
+    public static final String EMPTY="";
+
+    public static String trim(final String str) {
+        return str == null ? EMPTY : str.trim();
     }
 
-    public static final String EMPTY = "";
+
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+
+    public static boolean isNotEmpty(final CharSequence cs) {
+        return !isEmpty(cs);
+    }
+
+
+
+    public static boolean isEmpty(Collection<?> coll) {
+        return (coll == null || coll.isEmpty());
+    }
+
+
+    public static boolean isNotEmpty(Collection<?> coll) {
+        return !isEmpty(coll);
+    }
+
+
+    public static boolean isEmpty(Map<?, ?> map) {
+        return (map == null || map.isEmpty());
+    }
+
+
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
+    }
+
+
+    public static boolean isEmpty(final Object[] cs) {
+        return cs == null || cs.length==0;
+    }
+
+
+
+    public static boolean isNotEmpty(final byte[] cs) {
+        return !isEmpty(cs);
+    }
+
+    public static boolean isEmpty(final byte[] cs) {
+        return cs == null || cs.length==0;
+    }
+
+
+    public static boolean isDigits(String str) {
+        return isNumeric(str);
+    }
+
+    public static boolean isNumeric(CharSequence cs) {
+        if (isEmpty(cs)) {
+            return false;
+        } else {
+            int sz = cs.length();
+
+            for(int i = 0; i < sz; ++i) {
+                if (!Character.isDigit(cs.charAt(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 
     public static String formatString(Object object){
         if (object==null){
@@ -21,7 +91,7 @@ public class ObjectUtil {
     }
 
     public static Integer parseInteger(String str ,Integer defaultValue){
-        if (StringUtil.isEmpty(str)){
+        if (ObjectUtil.isEmpty(str)){
             return defaultValue;
         }
         try {
@@ -32,7 +102,7 @@ public class ObjectUtil {
     }
 
     public static Long parseLong(String str ,Long defaultValue){
-        if (StringUtil.isEmpty(str)){
+        if (ObjectUtil.isEmpty(str)){
             return defaultValue;
         }
         try {
@@ -43,7 +113,7 @@ public class ObjectUtil {
     }
 
     public static boolean parseBoolean(String str,boolean defaultValue){
-        if (StringUtil.isEmpty(str)){
+        if (ObjectUtil.isEmpty(str)){
             return defaultValue;
         }
         try {
@@ -139,35 +209,187 @@ public class ObjectUtil {
         }
     }
 
-    public static Object formatObject(Object defaultValue,Class type){
-        ClassTypeEnum classTypeEnum = ClassTypeEnum.getValue(type.getTypeName());
-        try {
-            if (classTypeEnum != null) {
-                switch (classTypeEnum) {
-                    case PACK_BOOLEAN:
-                        return formatBoolean(defaultValue);
-                    case PACK_INT:
-                        return formatInteger(defaultValue);
-                    case PACK_LONG:
-                        return  formatLong(defaultValue);
-                    case PACK_DOUBLE:
-                        return formatDouble(defaultValue);
-                    case PACK_FLOAT:
-                        return formatFloat(defaultValue);
-                    case PACK_SHORT:
-                        return formatShort(defaultValue);
-                    case BIGDECIMAL:
-                        return BigDecimalUtil.formatBigDecimal(defaultValue);
-                    default:
-                        return defaultValue;
-                }
-            }else{
-                return defaultValue;
-            }
-        } catch (Exception e){
-            log.error("formatObject classType:{} value:{} error:",type,defaultValue,e);
+
+    /**
+     * <p>Checks if a String {@code str} contains Unicode digits,
+     * if yes then concatenate all the digits in {@code str} and return it as a String.</p>
+     *
+     * <p>An empty ("") String will be returned if no digits found in {@code str}.</p>
+     *
+     * <pre>
+     * StringUtils.getDigits(null)  = null
+     * StringUtils.getDigits("")    = ""
+     * StringUtils.getDigits("abc") = ""
+     * StringUtils.getDigits("1000$") = "1000"
+     * StringUtils.getDigits("1123~45") = "112345"
+     * StringUtils.getDigits("(541) 754-3010") = "5417543010"
+     * StringUtils.getDigits("\u0967\u0968\u0969") = "\u0967\u0968\u0969"
+     * </pre>
+     *
+     * @param str the String to extract digits from, may be null
+     * @return String with only digits,
+     *           or an empty ("") String if no digits found,
+     *           or {@code null} String if {@code str} is null
+     * @since 3.6
+     */
+    public static String getDigits(final String str) {
+        if (isEmpty(str)) {
+            return str;
         }
-        return null;
+        final int sz = str.length();
+        final StringBuilder strDigits = new StringBuilder(sz);
+        for (int i = 0; i < sz; i++) {
+            final char tempChar = str.charAt(i);
+            if (Character.isDigit(tempChar)) {
+                strDigits.append(tempChar);
+            }
+        }
+        return strDigits.toString();
+    }
+
+
+    /**
+     * <p>Truncates a String. This will turn
+     * "Now is the time for all good men" into "Now is the time for".</p>
+     *
+     * <p>Specifically:</p>
+     * <ul>
+     *   <li>If {@code str} is less than {@code maxWidth} characters
+     *       long, return it.</li>
+     *   <li>Else truncate it to {@code substring(str, 0, maxWidth)}.</li>
+     *   <li>If {@code maxWidth} is less than {@code 0}, throw an
+     *       {@code IllegalArgumentException}.</li>
+     *   <li>In no case will it return a String of length greater than
+     *       {@code maxWidth}.</li>
+     * </ul>
+     *
+     * <pre>
+     * StringUtils.truncate(null, 0)       = null
+     * StringUtils.truncate(null, 2)       = null
+     * StringUtils.truncate("", 4)         = ""
+     * StringUtils.truncate("abcdefg", 4)  = "abcd"
+     * StringUtils.truncate("abcdefg", 6)  = "abcdef"
+     * StringUtils.truncate("abcdefg", 7)  = "abcdefg"
+     * StringUtils.truncate("abcdefg", 8)  = "abcdefg"
+     * StringUtils.truncate("abcdefg", -1) = throws an IllegalArgumentException
+     * </pre>
+     *
+     * @param str  the String to truncate, may be null
+     * @param maxWidth  maximum length of result String, must be positive
+     * @return truncated String, {@code null} if null String input
+     * @since 3.5
+     */
+    public static String truncate(final String str, final int maxWidth) {
+        return truncate(str, 0, maxWidth);
+    }
+
+    /**
+     * <p>Truncates a String. This will turn
+     * "Now is the time for all good men" into "is the time for all".</p>
+     *
+     * <p>Works like {@code truncate(String, int)}, but allows you to specify
+     * a "left edge" offset.
+     *
+     * <p>Specifically:</p>
+     * <ul>
+     *   <li>If {@code str} is less than {@code maxWidth} characters
+     *       long, return it.</li>
+     *   <li>Else truncate it to {@code substring(str, offset, maxWidth)}.</li>
+     *   <li>If {@code maxWidth} is less than {@code 0}, throw an
+     *       {@code IllegalArgumentException}.</li>
+     *   <li>If {@code offset} is less than {@code 0}, throw an
+     *       {@code IllegalArgumentException}.</li>
+     *   <li>In no case will it return a String of length greater than
+     *       {@code maxWidth}.</li>
+     * </ul>
+     *
+     * <pre>
+     * StringUtils.truncate(null, 0, 0) = null
+     * StringUtils.truncate(null, 2, 4) = null
+     * StringUtils.truncate("", 0, 10) = ""
+     * StringUtils.truncate("", 2, 10) = ""
+     * StringUtils.truncate("abcdefghij", 0, 3) = "abc"
+     * StringUtils.truncate("abcdefghij", 5, 6) = "fghij"
+     * StringUtils.truncate("raspberry peach", 10, 15) = "peach"
+     * StringUtils.truncate("abcdefghijklmno", 0, 10) = "abcdefghij"
+     * StringUtils.truncate("abcdefghijklmno", -1, 10) = throws an IllegalArgumentException
+     * StringUtils.truncate("abcdefghijklmno", Integer.MIN_VALUE, 10) = "abcdefghij"
+     * StringUtils.truncate("abcdefghijklmno", Integer.MIN_VALUE, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringUtils.truncate("abcdefghijklmno", 0, Integer.MAX_VALUE) = "abcdefghijklmno"
+     * StringUtils.truncate("abcdefghijklmno", 1, 10) = "bcdefghijk"
+     * StringUtils.truncate("abcdefghijklmno", 2, 10) = "cdefghijkl"
+     * StringUtils.truncate("abcdefghijklmno", 3, 10) = "defghijklm"
+     * StringUtils.truncate("abcdefghijklmno", 4, 10) = "efghijklmn"
+     * StringUtils.truncate("abcdefghijklmno", 5, 10) = "fghijklmno"
+     * StringUtils.truncate("abcdefghijklmno", 5, 5) = "fghij"
+     * StringUtils.truncate("abcdefghijklmno", 5, 3) = "fgh"
+     * StringUtils.truncate("abcdefghijklmno", 10, 3) = "klm"
+     * StringUtils.truncate("abcdefghijklmno", 10, Integer.MAX_VALUE) = "klmno"
+     * StringUtils.truncate("abcdefghijklmno", 13, 1) = "n"
+     * StringUtils.truncate("abcdefghijklmno", 13, Integer.MAX_VALUE) = "no"
+     * StringUtils.truncate("abcdefghijklmno", 14, 1) = "o"
+     * StringUtils.truncate("abcdefghijklmno", 14, Integer.MAX_VALUE) = "o"
+     * StringUtils.truncate("abcdefghijklmno", 15, 1) = ""
+     * StringUtils.truncate("abcdefghijklmno", 15, Integer.MAX_VALUE) = ""
+     * StringUtils.truncate("abcdefghijklmno", Integer.MAX_VALUE, Integer.MAX_VALUE) = ""
+     * StringUtils.truncate("abcdefghij", 3, -1) = throws an IllegalArgumentException
+     * StringUtils.truncate("abcdefghij", -2, 4) = throws an IllegalArgumentException
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @param offset  left edge of source String
+     * @param maxWidth  maximum length of result String, must be positive
+     * @return truncated String, {@code null} if null String input
+     * @since 3.5
+     */
+    public static String truncate(final String str, final int offset, final int maxWidth) {
+        if (offset < 0) {
+            throw new IllegalArgumentException("offset cannot be negative");
+        }
+        if (maxWidth < 0) {
+            throw new IllegalArgumentException("maxWith cannot be negative");
+        }
+        if (str == null) {
+            return null;
+        }
+        if (offset > str.length()) {
+            return EMPTY;
+        }
+        if (str.length() > maxWidth) {
+            final int ix = offset + maxWidth > str.length() ? str.length() : offset + maxWidth;
+            return str.substring(offset, ix);
+        }
+        return str.substring(offset);
+    }
+
+
+    public static byte[] getBytesUtf8(final String string) {
+        return getBytes(string, Charsets.UTF_8);
+    }
+
+    /**
+     * Calls {@link String#getBytes(Charset)}
+     *
+     * @param string
+     *            The string to encode (if null, return null).
+     * @param charset
+     *            The {@link Charset} to encode the <code>String</code>
+     * @return the encoded bytes
+     */
+    private static byte[] getBytes(final String string, final Charset charset) {
+        if (string == null) {
+            return null;
+        }
+        return string.getBytes(charset);
+    }
+
+    public static String newStringUsAscii(final byte[] bytes) {
+        return newString(bytes, Charsets.US_ASCII);
+    }
+
+
+    private static String newString(final byte[] bytes, final Charset charset) {
+        return bytes == null ? null : new String(bytes, charset);
     }
 
 }

@@ -1,5 +1,0 @@
-com.github.fashionbrot.tool.compressor.zip.ZipCompressor
-com.github.fashionbrot.tool.compressor.sevenz.SevenZCompressor
-com.github.fashionbrot.tool.compressor.lz4.Lz4Compressor
-com.github.fashionbrot.tool.compressor.gizp.GzipCompressor
-com.github.fashionbrot.tool.compressor.bzip2.BZip2Compressor

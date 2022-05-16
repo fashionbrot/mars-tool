@@ -202,7 +202,7 @@ public class HttpClientUtil {
 
             outputStream = conn.getOutputStream();
             if (outputStream != null) {
-                outputStream.write(StringUtil.isNotEmpty(content) ? content.getBytes() : ArrayUtil.EMPTY_BYTE_ARRAY);
+                outputStream.write(ObjectUtil.isNotEmpty(content) ? content.getBytes() : ArrayUtil.EMPTY_BYTE_ARRAY);
                 outputStream.flush();
             }
             int respCode = conn.getResponseCode();

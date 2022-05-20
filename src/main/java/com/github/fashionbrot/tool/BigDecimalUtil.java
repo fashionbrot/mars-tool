@@ -1,5 +1,6 @@
 package com.github.fashionbrot.tool;
 
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -310,7 +311,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 Double 小数点
+     * 格式化 double
      * @param d
      * @param scale
      * @return double

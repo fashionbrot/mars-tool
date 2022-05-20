@@ -52,49 +52,9 @@ public class MethodUtil {
     }
 
 
-    public static Object getMethod(Class clazz, Field field, Object object, String fieldName){
-        if (field.getType()==boolean.class){
-            return getFieldBooleanMethod(clazz,field,object,fieldName);
-        }
-        try {
-            Method method = clazz.getDeclaredMethod(METHOD+ getMethodName(fieldName),null);
-            if (method!=null){
-                return method.invoke(object,null);
-            }
-        } catch (NoSuchMethodException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e2) {
-            e2.printStackTrace();
-        } catch (InvocationTargetException e3) {
-            e3.printStackTrace();
-        }
-        return null;
-    }
 
-    public static Object getFieldBooleanMethod(Class clazz,Field field,Object object,String fieldName){
-        Method method = null;
-        try {
-            method = clazz.getDeclaredMethod(BOOLEAN_METHOD+ getMethodName(fieldName),null);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        if (method==null){
-            try {
-                method = clazz.getDeclaredMethod(METHOD+ getMethodName(fieldName),null);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            return method.invoke(object,null);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
 
-        return null;
-    }
+
 
 
 

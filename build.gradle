@@ -125,11 +125,10 @@ signing {
 
 dependencies {
 
-    annotationProcessor 'org.projectlombok:lombok:1.18.6'
-    compileOnly 'org.projectlombok:lombok:1.18.6'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.6'
-    testCompileOnly 'org.projectlombok:lombok:1.18.6'
+    compileOnly   'org.projectlombok:lombok:1.18.6'
+    annotationProcessor  'org.projectlombok:lombok:1.18.6'
 
+    implementation 'org.slf4j:slf4j-api:1.7.12'
 }
 
 // 指定java版本

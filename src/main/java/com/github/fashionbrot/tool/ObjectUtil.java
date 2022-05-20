@@ -1,6 +1,5 @@
 package com.github.fashionbrot.tool;
 
-import org.apache.commons.compress.utils.Charsets;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -59,6 +58,17 @@ public class ObjectUtil {
 
     public static boolean isEmpty(final byte[] cs) {
         return cs == null || cs.length==0;
+    }
+
+
+    /**
+     * Is not empty boolean.
+     *
+     * @param array the array
+     * @return the boolean
+     */
+    public static boolean isNotEmpty(Object[] array) {
+        return array != null && array.length > 0;
     }
 
 
@@ -364,7 +374,7 @@ public class ObjectUtil {
 
 
     public static byte[] getBytesUtf8(final String string) {
-        return getBytes(string, Charsets.UTF_8);
+        return getBytes(string, Charset.forName("UTF-8"));
     }
 
     /**
@@ -384,12 +394,18 @@ public class ObjectUtil {
     }
 
     public static String newStringUsAscii(final byte[] bytes) {
-        return newString(bytes, Charsets.US_ASCII);
+        return newString(bytes, Charset.forName("US_ASCII"));
     }
 
 
     private static String newString(final byte[] bytes, final Charset charset) {
         return bytes == null ? null : new String(bytes, charset);
+    }
+
+
+    public static void main(String[] args) {
+        Charset us_ascii = Charset.forName("US_ASCII");
+        System.out.println(us_ascii.displayName());
     }
 
 }

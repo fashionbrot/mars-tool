@@ -235,7 +235,7 @@ public class FileUtil {
         List<File> fileList = new ArrayList<File>();
         findPath(f.getPath(), fileList, PROPERTIES_SUFFIX);
         Properties all = new Properties();
-        if (!CollectionUtil.isEmpty(fileList)) {
+        if (ObjectUtil.isNotEmpty(fileList)) {
             for (File properties : fileList) {
                 if (ObjectUtil.isEmpty(fileName)) {
                     all.putAll(toProperties(properties));

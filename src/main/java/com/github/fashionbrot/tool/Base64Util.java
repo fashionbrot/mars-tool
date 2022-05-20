@@ -8,14 +8,14 @@ public class Base64Util {
 
     public static byte[] decodeBase64(byte[] str) {
         if (ObjectUtil.isNotEmpty(str)) {
-            return Base64.getDecoder().decode(str);
+            return Base64.getMimeDecoder().decode(str);
         }
         return byte_empty;
     }
 
     public static byte[] decodeBase64(String str) {
         if (ObjectUtil.isNotEmpty(str)) {
-            return Base64.getDecoder().decode(str);
+            return Base64.getMimeDecoder().decode(str);
         }
         return byte_empty;
     }
@@ -23,7 +23,7 @@ public class Base64Util {
 
     public static byte[] encodeBase64(final byte[] binaryData) {
         if (ObjectUtil.isNotEmpty(binaryData)) {
-            return Base64.getEncoder().encode(binaryData);
+            return Base64.getMimeEncoder().encode(binaryData);
         }
         return byte_empty;
     }

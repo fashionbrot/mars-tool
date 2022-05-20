@@ -8,7 +8,7 @@ public class IOUtil {
      * @param closeables the closeables
      */
     public static void close(AutoCloseable... closeables) {
-        if (CollectionUtil.isNotEmpty(closeables)) {
+        if (ObjectUtil.isNotEmpty(closeables)) {
             for (AutoCloseable closeable : closeables) {
                 close(closeable);
             }

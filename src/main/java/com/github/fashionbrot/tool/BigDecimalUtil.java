@@ -32,7 +32,6 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value.toString() + "");
             } catch (Exception var2) {
-                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }
@@ -45,7 +44,6 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value + "");
             } catch (Exception var2) {
-                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }
@@ -58,7 +56,6 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value);
             } catch (Exception var2) {
-                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }

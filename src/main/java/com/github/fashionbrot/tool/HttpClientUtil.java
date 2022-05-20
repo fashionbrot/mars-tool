@@ -250,14 +250,14 @@ public class HttpClientUtil {
         if (headers!=null){
             if (headers instanceof List){
                 List<String> headList= (List<String>) headers;
-                if (CollectionUtil.isNotEmpty(headList)) {
+                if (ObjectUtil.isNotEmpty(headList)) {
                     for (Iterator<String> iter = headList.iterator(); iter.hasNext(); ) {
                         conn.addRequestProperty(iter.next(), iter.next());
                     }
                 }
             }else if (headers instanceof Map){
                 Map<String,Object> objectMap = (Map<String, Object>) headers;
-                if (CollectionUtil.isNotEmpty(objectMap)){
+                if (ObjectUtil.isNotEmpty(objectMap)){
                     objectMap.forEach((k,v)->{
                         conn.addRequestProperty(k,v+"");
                     });
@@ -280,7 +280,7 @@ public class HttpClientUtil {
 
     private static String encodingParams(List<String> paramValues) {
         StringBuilder sb = new StringBuilder();
-        if (CollectionUtil.isEmpty(paramValues)) {
+        if (ObjectUtil.isEmpty(paramValues)) {
             return null;
         }
         for (Iterator<String> iter = paramValues.iterator(); iter.hasNext(); ) {
@@ -294,7 +294,7 @@ public class HttpClientUtil {
     }
 
     private static String encodingParams(Map<String,Object> paramValues) {
-        if (CollectionUtil.isEmpty(paramValues)) {
+        if (ObjectUtil.isEmpty(paramValues)) {
             return null;
         }
         StringBuilder sb = new StringBuilder();

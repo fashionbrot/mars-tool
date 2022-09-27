@@ -394,7 +394,7 @@ public class ObjectUtil {
     }
 
     public static String newStringUsAscii(final byte[] bytes) {
-        return newString(bytes, Charset.forName("US_ASCII"));
+        return newString(bytes, Charset.forName("UTF-8"));
     }
 
 
@@ -404,7 +404,7 @@ public class ObjectUtil {
 
 
     public static void main(String[] args) {
-        Charset us_ascii = Charset.forName("US_ASCII");
+        Charset us_ascii = Charset.forName("UTF-8");
         System.out.println(us_ascii.displayName());
     }
 

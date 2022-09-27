@@ -19,6 +19,19 @@ java {
     withSourcesJar()
 }
 
+javadoc {
+    afterEvaluate {
+        configure(options) {
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            author true
+            version true
+            failOnError false
+            links "http://docs.oracle.com/javase/8/docs/api"
+        }
+    }
+}
+
 jar {
     into("META-INF/") {
         from rootProject.file("LICENSE")

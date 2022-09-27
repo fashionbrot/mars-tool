@@ -1,6 +1,6 @@
 package com.github.fashionbrot.tool;
 
-
+import com.github.fashionbrot.tool.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -9,10 +9,9 @@ import java.math.RoundingMode;
 @Slf4j
 public class BigDecimalUtil {
 
-    private BigDecimalUtil(){
 
+    private BigDecimalUtil() {
     }
-
 
     public static BigDecimal formatBigDecimal(Object object) {
         if (object == null) {
@@ -33,6 +32,7 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value.toString() + "");
             } catch (Exception var2) {
+                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }
@@ -45,6 +45,7 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value + "");
             } catch (Exception var2) {
+                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }
@@ -57,6 +58,7 @@ public class BigDecimalUtil {
             try {
                 return new BigDecimal(value);
             } catch (Exception var2) {
+                log.error("formatBigDecimal value:{} error:{}", value, var2);
                 return BigDecimal.ZERO;
             }
         }
@@ -104,7 +106,7 @@ public class BigDecimalUtil {
         if (b2==null){
             b2 = BigDecimal.ZERO;
         }
-        return a1.multiply(b2).setScale(6, RoundingMode.HALF_UP);
+        return a1.multiply(b2).setScale(6,RoundingMode.HALF_UP);
     }
 
     /**
@@ -311,7 +313,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 double
+     * 格式化 Double 小数点
      * @param d
      * @param scale
      * @return double
@@ -420,5 +422,4 @@ public class BigDecimalUtil {
     public static void main(String[] args) {
         System.out.println(divideDouble(1161.33D,3.498,1));
     }
-
 }

@@ -1,7 +1,6 @@
 package com.github.fashionbrot.tool;
 
 
-import com.sun.istack.internal.Nullable;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -406,7 +405,7 @@ public class ObjectUtil {
     }
 
 
-    public static boolean nullSafeEquals(@Nullable Object o1, @Nullable Object o2) {
+    public static boolean nullSafeEquals( Object o1, Object o2) {
         if (o1 == o2) {
             return true;
         }

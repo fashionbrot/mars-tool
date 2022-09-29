@@ -1,6 +1,5 @@
 package com.github.fashionbrot.tool;
 
-import com.sun.istack.internal.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -93,7 +92,7 @@ public class ResponseCookie {
 
 
     @Override
-    public boolean equals(@Nullable Object other) {
+    public boolean equals( Object other) {
         if (this == other) {
             return true;
         }
@@ -138,7 +137,7 @@ public class ResponseCookie {
             }
         }
 
-        public static void validateCookieValue(@Nullable String value) {
+        public static void validateCookieValue( String value) {
             if (value == null) {
                 return;
             }
@@ -161,7 +160,7 @@ public class ResponseCookie {
             }
         }
 
-        public static void validateDomain(@Nullable String domain) {
+        public static void validateDomain( String domain) {
             if (ObjectUtil.isEmpty(domain)) {
                 return;
             }
@@ -179,7 +178,7 @@ public class ResponseCookie {
             }
         }
 
-        public static void validatePath(@Nullable String path) {
+        public static void validatePath( String path) {
             if (path == null) {
                 return;
             }

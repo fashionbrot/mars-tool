@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 
-public class EncryptUtil {
+public class PasswordUtil {
 
     public static void main(String[] args){
         //be3ce882f406df824ac7e2bced77fcf2
@@ -19,6 +19,12 @@ public class EncryptUtil {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
+    /**
+     * 加密
+     * @param password
+     * @param salt
+     * @return
+     */
     public static String encryptPassword(String password, String salt) {
         MessageDigest instance = null;
         try {

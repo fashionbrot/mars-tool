@@ -141,9 +141,9 @@ dependencies {
     compileOnly   'org.projectlombok:lombok:1.18.6'
     annotationProcessor  'org.projectlombok:lombok:1.18.6'
 
-    implementation 'org.slf4j:slf4j-api:1.7.12'
-    implementation 'com.auth0:java-jwt:4.0.0'
-    implementation 'javax.servlet:javax.servlet-api:3.1.0'
+    compileOnly 'org.slf4j:slf4j-api:1.7.12'
+    compileOnly 'com.auth0:java-jwt:4.0.0'
+    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
 }
 
 // 指定java版本
@@ -151,7 +151,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group = 'com.github.fashionbrot'
-version = '0.0.4'
+version = '0.0.6'
 description = 'mars-tool'
 
 

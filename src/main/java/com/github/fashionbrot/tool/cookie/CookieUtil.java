@@ -1,14 +1,57 @@
-package com.github.fashionbrot.tool;
+package com.github.fashionbrot.tool.cookie;
+
+import com.github.fashionbrot.tool.ObjectUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author fashi
  */
 public class CookieUtil {
 
+    /**
+     * 增加cookie
+     * @param response
+     * @param responseCookie
+     */
+    public static void addCookie(HttpServletResponse response , ResponseCookie responseCookie){
+        if (responseCookie!=null){
+            response.addHeader(ResponseCookie.SET_COOKIE,responseCookie.toString());
+        }
+    }
+
+    /**
+     * 增加cookie
+     * @param response
+     * @param responseCookie
+     */
+    public static void addCookie(HttpServletResponse response , List<ResponseCookie> responseCookie){
+        if (ObjectUtil.isNotEmpty(responseCookie)){
+            responseCookie.forEach(c->{
+                if (c!=null){
+                    response.addHeader(ResponseCookie.SET_COOKIE,c.toString());
+                }
+            });
+        }
+    }
+
+    /**
+     * 增加cookie
+     * @param response
+     * @param responseCookie
+     */
+    public static void addCookie(HttpServletResponse response , ResponseCookie... responseCookie){
+        if (ObjectUtil.isNotEmpty(responseCookie)){
+            for (int i = 0; i < responseCookie.length; i++) {
+                if (responseCookie[i]!=null) {
+                    response.addHeader(ResponseCookie.SET_COOKIE, responseCookie[i].toString());
+                }
+            }
+        }
+    }
 
     /**
      * 新增 cookie
@@ -20,9 +63,8 @@ public class CookieUtil {
      * @param domain
      * @param httpOnly
      * @param secure
-     * @param sameSite
      */
-    public static void addCookie(HttpServletResponse response, String name, String value, String path, int maxAge, String domain, boolean httpOnly, boolean secure, String sameSite) {
+    public static void addCookie(HttpServletResponse response, String name, String value, String path, int maxAge, String domain, boolean httpOnly, boolean secure) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath(path);
         cookie.setMaxAge(maxAge);
@@ -31,7 +73,6 @@ public class CookieUtil {
         cookie.setSecure(secure);
 
         response.addCookie(cookie);
-        response.addHeader("SameSite",sameSite);
     }
 
 
@@ -54,7 +95,7 @@ public class CookieUtil {
      * @return
      */
     public static String getCookieValue(Cookie[] cookieList, String cookieName ) {
-        if (ObjectUtil.isNotEmpty(cookieList)){
+        if (ObjectUtil.isNotEmpty(cookieList) && ObjectUtil.isNotEmpty(cookieName)){
             for (int i = 0; i < cookieList.length; i++) {
                 if (cookieList[i].getName().equals(cookieName)) {
                     return cookieList[i].getValue();

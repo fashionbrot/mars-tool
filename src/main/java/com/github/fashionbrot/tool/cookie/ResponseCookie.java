@@ -1,5 +1,7 @@
-package com.github.fashionbrot.tool;
+package com.github.fashionbrot.tool.cookie;
 
+import com.github.fashionbrot.tool.ObjectUtil;
+import com.github.fashionbrot.tool.enums.SameSiteEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +16,7 @@ import java.util.Locale;
 
 /**
  * cookie 工具
+ * @author fashi
  */
 @Builder
 @Data
@@ -37,7 +40,7 @@ public class ResponseCookie {
 
     private boolean httpOnly;
 
-    private String sameSite;
+    private SameSiteEnum sameSite;
 
 
     private static final ZoneId GMT = ZoneId.of("GMT");
@@ -76,7 +79,7 @@ public class ResponseCookie {
         if (this.httpOnly) {
             sb.append("; HttpOnly");
         }
-        if (ObjectUtil.isNotEmpty(this.sameSite)) {
+        if (this.sameSite!=null && this.sameSite!= SameSiteEnum.NONE) {
             sb.append("; SameSite=").append(this.sameSite);
         }
         return sb.toString();

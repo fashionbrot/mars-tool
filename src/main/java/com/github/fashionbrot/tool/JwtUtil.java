@@ -117,6 +117,18 @@ public class JwtUtil {
         return jwt.getClaims();
     }
 
+    /**
+     * 解密token
+     * @param token
+     * @param algorithm
+     * @return
+     */
+    public static Map<String, Claim> verifyToken(String token,Algorithm algorithm) {
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT jwt = verifier.verify(token);
+        return jwt.getClaims();
+    }
+
 
     /**
      * 验证解密token

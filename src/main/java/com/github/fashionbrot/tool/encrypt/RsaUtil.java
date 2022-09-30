@@ -8,11 +8,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author fashi
+ */
 public class RsaUtil {
 
 
@@ -93,18 +97,53 @@ public class RsaUtil {
      * @return
      * @throws Exception
      */
-    public static String encrypt(KeyPair keyPair, String str) throws Exception {
+    public static String encrypt(KeyPair keyPair, String str) {
         if (ObjectUtil.isEmpty(str)) {
             return "";
         }
-//        str = new String(str.getBytes(StandardCharsets.UTF_8), "UTF-8");
+        return encrypt(str, (RSAPublicKey) keyPair.getPublic());
+    }
 
-        RSAPublicKey pubKey = (RSAPublicKey) keyPair.getPublic();
-        //RSA加密
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-        String outStr = Base64Util.encodeBase64String(cipher.doFinal(str.getBytes(StandardCharsets.UTF_8)));
-        return outStr;
+    /**
+     * 秘钥转换
+     * @param publicKey
+     * @return
+     */
+    public static RSAPublicKey convertPublicKey(String publicKey){
+        RSAPublicKey pubKey = null;
+        if (ObjectUtil.isNotEmpty(publicKey)){
+            byte[] decoded = Base64Util.decode(publicKey);
+            try {
+                pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+        return pubKey;
+    }
+
+    /**
+     * 秘钥转换
+     * @param privateKey
+     * @return
+     */
+    public static RSAPrivateKey convertPrivateKey(String privateKey){
+        RSAPrivateKey priKey = null;
+        if (ObjectUtil.isNotEmpty(privateKey)){
+            //base64编码的私钥
+            byte[] decoded = Base64Util.decode(privateKey);
+            try {
+                priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+            } catch (InvalidKeySpecException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return priKey;
     }
 
     /**
@@ -115,27 +154,26 @@ public class RsaUtil {
      * @return 密文
      * @throws Exception 加密过程中的异常信息
      */
-    public static String encrypt(String str, String publicKey) throws Exception {
+    public static String encrypt(String str, String publicKey){
         if (ObjectUtil.isEmpty(str)) {
             return "";
         }
         //base64编码的公钥
-        byte[] decoded = Base64Util.decode(publicKey);
-        RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
-
-        return encrypt(str,pubKey);
+        RSAPublicKey rsaPublicKey = convertPublicKey(publicKey);
+        return encrypt(str,rsaPublicKey);
     }
 
 
     public static String encrypt(String str,RSAPublicKey pubKey){
         //RSA加密
-        try {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-            String outStr = Base64Util.encodeBase64String(cipher.doFinal(str.getBytes(StandardCharsets.UTF_8)));
-            return outStr;
-        }catch (Exception e){
-            e.printStackTrace();
+        if (ObjectUtil.isNotEmpty(str)){
+            try {
+                Cipher cipher = Cipher.getInstance("RSA");
+                cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+                return Base64Util.encodeBase64String(cipher.doFinal(str.getBytes(StandardCharsets.UTF_8)));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return "";
     }
@@ -148,46 +186,35 @@ public class RsaUtil {
      * @return 名文
      * @throws Exception 解密过程中的异常信息
      */
-    public static String decrypt(String str, String privateKey) throws Exception {
+    public static String decrypt(String str, String privateKey)  {
         if (ObjectUtil.isEmpty(str)) {
             return "";
         }
-
-        //base64编码的私钥
-        byte[] decoded = Base64Util.decode(privateKey);
-        RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
-
-        return decrypt(str,priKey);
+        RSAPrivateKey rsaPrivateKey = convertPrivateKey(privateKey);
+        return decrypt(str,rsaPrivateKey);
     }
 
 
     public static String decrypt(String str, RSAPrivateKey priKey) {
-        //64位解码加密后的字符串
-        byte[] inputByte = Base64Util.decode(str.getBytes());
-        try {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, priKey);
-            String outStr = new String(cipher.doFinal(inputByte));
-            return outStr;
-        }catch (Exception e){
-            e.printStackTrace();
+        if (ObjectUtil.isNotEmpty(str)){
+            byte[] inputByte = Base64Util.decode(str.getBytes());
+            try {
+                Cipher cipher = Cipher.getInstance("RSA");
+                cipher.init(Cipher.DECRYPT_MODE, priKey);
+                return new String(cipher.doFinal(inputByte));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return "";
     }
 
 
-    public static String decrypt(KeyPair keyPair, String str) throws Exception {
+    public static String decrypt(KeyPair keyPair, String str)  {
         if (ObjectUtil.isEmpty(str)) {
             return "";
         }
-        //64位解码加密后的字符串
-        byte[] inputByte = Base64Util.decode(str.getBytes());
-        RSAPrivateKey priKey = (RSAPrivateKey) keyPair.getPrivate();
-        //RSA解密
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, priKey);
-        String outStr = new String(cipher.doFinal(inputByte));
-        return outStr;
+        return decrypt(str, (RSAPrivateKey) keyPair.getPrivate());
     }
 
 

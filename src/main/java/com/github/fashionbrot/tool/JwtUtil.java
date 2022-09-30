@@ -66,6 +66,33 @@ public class JwtUtil {
         return token;
     }
 
+    public static Algorithm getAlgorithmHMAC(AlgorithmEnum algorithmEnum,String secretKey){
+        if (algorithmEnum == AlgorithmEnum.HMAC256){
+            return Algorithm.HMAC256(secretKey);
+        }else if (algorithmEnum== AlgorithmEnum.HMAC512){
+            return Algorithm.HMAC512(secretKey);
+        }
+        return null;
+    }
+
+    public static Algorithm getAlgorithmRsaStr(AlgorithmEnum algorithmEnum,String publicKey ,String privateKey){
+        RSAPublicKey rsaPublicKey = RsaUtil.convertPublicKey(publicKey);
+        RSAPrivateKey rsaPrivateKey = RsaUtil.convertPrivateKey(privateKey);
+        return getAlgorithmRsa(algorithmEnum,rsaPublicKey,rsaPrivateKey);
+    }
+
+    public static Algorithm getAlgorithmRsa(AlgorithmEnum algorithmEnum ,RSAPublicKey publicKey,RSAPrivateKey privateKey){
+        if (publicKey==null || privateKey==null){
+            return null;
+        }
+        if (algorithmEnum== AlgorithmEnum.RSA256){
+            return Algorithm.RSA256(publicKey,privateKey);
+        }else if (algorithmEnum==AlgorithmEnum.RSA512){
+            return Algorithm.RSA512(publicKey,privateKey);
+        }
+        return null;
+    }
+
     /**
      * 验证解密token
      * @param token
@@ -101,7 +128,7 @@ public class JwtUtil {
                 if (ObjectUtil.isEmpty(SECRET)) {
                     SECRET = NanoIdUtil.randomNanoId(64);
                 }
-                return Algorithm.HMAC256(SECRET);
+                return getAlgorithmHMAC(algorithmEnum,SECRET);
             } else {
                 Algorithm  algorithm = null;
                 if (algorithmEnum == AlgorithmEnum.RSA256) {
@@ -112,7 +139,6 @@ public class JwtUtil {
                             PRIVATE_KEY = (RSAPrivateKey) keyPair.getPrivate();
                         }
                     }
-                    algorithm =  Algorithm.RSA256(PUBLIC_KEY, PRIVATE_KEY);
                 } else if (algorithmEnum == AlgorithmEnum.RSA512) {
                     if (PUBLIC_KEY==null) {
                         KeyPair keyPair = RsaUtil.genKeyPair(1024);
@@ -121,9 +147,8 @@ public class JwtUtil {
                             PRIVATE_KEY = (RSAPrivateKey) keyPair.getPrivate();
                         }
                     }
-                    algorithm =  Algorithm.RSA512(PUBLIC_KEY, PRIVATE_KEY);
                 }
-                return algorithm;
+                return getAlgorithmRsa(algorithmEnum,PUBLIC_KEY,PRIVATE_KEY);
             }
         }finally {
             lock.unlock();
@@ -137,13 +162,13 @@ public class JwtUtil {
 
         Map map=new HashMap(1);
         map.put("test","张三");
-        String token1 = createToken(map,AlgorithmEnum.HMAC256,2);
+        String token1 = createToken(map,AlgorithmEnum.HMAC512,2);
         System.out.println(token1);
         String key = "q!w@e#r$t%Y^UIOP";
         String aesToken = AesUtil.encryptString(token1, key);
         System.out.println("AES token:"+aesToken);
 
-        Map<String, Claim> stringClaimMap = verifyToken(token1,AlgorithmEnum.HMAC256);
+        Map<String, Claim> stringClaimMap = verifyToken(token1,AlgorithmEnum.HMAC512);
         System.out.println(stringClaimMap);
 
 

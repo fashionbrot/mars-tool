@@ -13,7 +13,9 @@ import lombok.Getter;
 public enum AlgorithmEnum {
     RSA256("RSA256"),
     RSA512("RSA512"),
-    HMAC256("HMAC256");
+    HMAC256("HMAC256"),
+    HMAC512("HMAC512")
+    ;
 
 
     private String algorithm;

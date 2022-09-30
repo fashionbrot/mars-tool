@@ -40,6 +40,8 @@ public class JwtUtil {
         return createToken(obj, AlgorithmEnum.RSA256,second);
     }
 
+
+
     /**
      * 创建token
      * @param obj
@@ -48,23 +50,33 @@ public class JwtUtil {
      * @return
      */
     public static String createToken(Map<String,Object> obj,AlgorithmEnum algorithm,int second) {
+        return createToken(obj,getAlgorithm(algorithm),second);
+    }
+
+    /**
+     * 创建token
+     * @param obj
+     * @param algorithm
+     * @param second
+     * @return
+     */
+    public static String createToken(Map<String,Object> obj,Algorithm algorithm,int second) {
         Date iatDate = new Date();
         // expire time
         Calendar nowTime = Calendar.getInstance();
         nowTime.add(Calendar.SECOND, second);
         Date expiresDate = nowTime.getTime();
 
-        String token = JWT.create()
+        return JWT.create()
                 .withPayload(obj)
-//                .withClaim("map",obj)
                 // sign time
                 .withIssuedAt(iatDate)
                 // expire time
                 .withExpiresAt(expiresDate)
-                .sign(getAlgorithm(algorithm));
-
-        return token;
+                .sign(algorithm);
     }
+
+
 
     public static Algorithm getAlgorithmHMAC(AlgorithmEnum algorithmEnum,String secretKey){
         if (algorithmEnum == AlgorithmEnum.HMAC256){

@@ -14,11 +14,21 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 
-java {
-    withJavadocJar()
-    withSourcesJar()
+//java {
+//    withJavadocJar()
+//    withSourcesJar()
+//}
+
+
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar) {
+    archiveClassifier = 'javadoc'
+    from javadoc
+}
 javadoc {
     afterEvaluate {
         configure(options) {
@@ -31,7 +41,6 @@ javadoc {
         }
     }
 }
-
 jar {
     into("META-INF/") {
         from rootProject.file("LICENSE")
@@ -55,7 +64,9 @@ jar {
 
 
 repositories {
-    mavenCentral()
+    mavenLocal()
+    maven { url "https://maven.aliyun.com/repository/public" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 
@@ -67,6 +78,8 @@ publishing {
 
             from components.java
 
+            artifact sourcesJar
+            artifact javadocJar
 
             pom {
 

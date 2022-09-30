@@ -16,39 +16,13 @@ public class DateUtil {
 
     }
 
-    /**
-     * 日期格式 年 如2009
-     */
+
     public static final String DATE_FORMAT_YEAR = "yyyy";
-
-    /**
-     * 日期格式 年 月  如 2009-02
-     */
     public static final String DATE_FORMAT_MONTH = "yyyy-MM";
-
-    /**
-     * 日期格式 年 月 日 如2009-02-26
-     */
     public static final String DATE_FORMAT_DAY = "yyyy-MM-dd";
-
-    /**
-     * 日期格式 年 月 日 时 如2009-02-26 15
-     */
     public static final String DATE_FORMAT_HOUR = "yyyy-MM-dd HH";
-
-    /**
-     * 日期格式 年 月 日 时 分 如2009-02-26 15:40
-     */
     public static final String DATE_FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
-
-    /**
-     * 日期格式年 月 日 时 分 秒 如 2009-02-26 15:40:00
-     */
     public static final String DATE_FORMAT_SECOND = "yyyy-MM-dd HH:mm:ss";
-
-    /**
-     * 日期格式年 月 日 时 分 秒 毫秒 如2009-02-26 15:40:00 110
-     */
     public static final String DATE_FORMAT_MILLI_SECOND = "yyyy-MM-dd HH:mm:ss SSS";
 
     public static final DateTimeFormatter defaultFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_SECOND);
@@ -56,7 +30,7 @@ public class DateUtil {
     public static final DateTimeFormatter DATE_FORMAT_DAY_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT_DAY);
 
     /**
-     * 格式化 Date 转 String (yyyy-MM-dd HH:mm:ss)
+     * 格式化Date to String (yyyy-MM-dd HH:mm:ss)
      * @param date
      * @return String
      */
@@ -65,7 +39,7 @@ public class DateUtil {
     }
 
     /**
-     * 格式化 Date 转 String
+     * 格式化Date to String
      * @param dateTimeFormatter
      * @param date
      * @return String
@@ -75,7 +49,7 @@ public class DateUtil {
     }
 
     /**
-     * 格式化 字符串 转 Date(yyyy-MM-dd HH:mm:ss)
+     * 格式化字符串 to Date(yyyy-MM-dd HH:mm:ss)
      * @param dataStr
      * @return Date
      */
@@ -84,7 +58,7 @@ public class DateUtil {
     }
 
     /**
-     * 格式化 字符串 转 Date
+     * 格式化字符串 to Date
      * @param formatter
      * @param dateStr
      * @return Date
@@ -100,9 +74,9 @@ public class DateUtil {
     }
 
     /**
-     * 得到本月最后一天的日期
+     * 获取本月最后一天
      * @param dateStr
-     * @return Date
+     * @return
      */
     public static Date getLastDayOfMonth(String dateStr){
         Date date = parseDate(DATE_FORMAT_DAY_FORMATTER,dateStr);

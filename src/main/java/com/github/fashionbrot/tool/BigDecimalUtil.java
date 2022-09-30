@@ -1,13 +1,12 @@
 package com.github.fashionbrot.tool;
 
-import com.github.fashionbrot.tool.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Slf4j
 public class BigDecimalUtil {
+
 
 
     private BigDecimalUtil() {
@@ -66,8 +65,8 @@ public class BigDecimalUtil {
 
     /**
      * 减法
-     * @param a1
-     * @param b2
+     * @param a1 a1
+     * @param b2 b2
      * @return
      */
     public static BigDecimal subtract(BigDecimal a1,BigDecimal b2){
@@ -82,8 +81,8 @@ public class BigDecimalUtil {
 
     /**
      * 减法
-     * @param a1
-     * @param b2
+     * @param a1 a1
+     * @param b2 b2
      * @return
      */
     public static double subtractDouble(Double a1,Double b2){
@@ -313,7 +312,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 Double 小数点
+     * 格式化Double小数
      * @param d
      * @param scale
      * @return double
@@ -326,7 +325,7 @@ public class BigDecimalUtil {
         return v.setScale(scale,RoundingMode.HALF_UP).doubleValue();
     }
     /**
-     * 格式化 Double 小数点
+     * 格式化Double小数
      * @param d
      * @param scale
      * @return double
@@ -340,7 +339,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 BigDecimal 小数点
+     * 格式化BigDecimal小数
      * @param d
      * @return double
      */
@@ -352,7 +351,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 BigDecimal 小数点
+     * 格式化BigDecimal小数
      * @param d
      * @param scale
      * @return double
@@ -365,7 +364,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 BigDecimal 小数点
+     * 格式化BigDecimal小数
      * @param d
      * @param scale
      * @return BigDecimal
@@ -378,7 +377,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 BigDecimal 小数点
+     * 格式化BigDecimal小数
      * @param d
      * @param scale
      * @return BigDecimal
@@ -392,7 +391,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 String 小数点
+     * 格式化String小数
      * @param d
      * @param scale
      * @return BigDecimal
@@ -406,7 +405,7 @@ public class BigDecimalUtil {
     }
 
     /**
-     * 格式化 String 小数点
+     * 格式化String小数
      * @param d
      * @param scale
      * @return BigDecimal

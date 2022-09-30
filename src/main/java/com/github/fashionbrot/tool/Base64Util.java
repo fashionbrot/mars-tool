@@ -12,7 +12,7 @@ public class Base64Util {
 
     /**
      * 加密
-     * @param binaryData
+     * @param  binaryData
      * @return
      */
     public static byte[] encode(final byte[] binaryData) {
@@ -33,6 +33,7 @@ public class Base64Util {
         }
         return byte_empty;
     }
+
     /**
      * 加密
      * @param binaryData
@@ -45,7 +46,6 @@ public class Base64Util {
         }
         return byte_empty;
     }
-
 
 
     /**

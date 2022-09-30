@@ -109,7 +109,7 @@ public class CookieUtil {
     /**
      * 获取域名
      */
-    private static final String getDomainName(HttpServletRequest request) {
+    private static  String getDomainName(HttpServletRequest request) {
         String domainName = "";
 
         String serverName = request.getRequestURL().toString();

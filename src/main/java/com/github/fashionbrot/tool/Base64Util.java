@@ -10,16 +10,18 @@ public class Base64Util {
 
     public final static byte[] byte_empty = new byte[]{};
 
+
     /**
      * 加密
-     * @param  binaryData
+     * @param binaryData
      * @return
      */
-    public static byte[] encode(final byte[] binaryData) {
+    protected static byte[] encode(byte[] binaryData) {
+        byte[] result = byte_empty;
         if (ObjectUtil.isNotEmpty(binaryData)) {
-            return Base64.getEncoder().encode(binaryData);
+            result = Base64.getEncoder().encode(binaryData);
         }
-        return byte_empty;
+        return result;
     }
 
     /**
